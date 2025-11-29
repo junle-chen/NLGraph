@@ -41,7 +41,7 @@ class Generator:
 parser = argparse.ArgumentParser(description="shortest path generation")
 parser.add_argument('--mode', type=str, default="easy", help='mode (default: easy)')
 args = parser.parse_args()    
-assert args.mode in ["easy","hard"]
+assert args.mode in ["easy","hard", "extreme", "extreme+" ]
 p_list = [0.5, 0.7, 0.9]
 standard_num = 10
 if args.mode == "easy": # 6*10*3
@@ -56,11 +56,25 @@ elif args.mode =="hard": # 10*10*2
     g_num = 10 * 6
     max_weight = 10
 
-newpath = r'D:\python\LLM\shortest_path\graph'+ '\\'+args.mode
+elif args.mode == "extreme": # 10*10*2
+    n_min = 21
+    n_max = 30
+    p_list = [0.15, 0.2]
+    g_num = 10 * 6
+    max_weight = 20
+
+elif args.mode == "extreme+":
+    n_min = 31
+    n_max = 40
+    p_list = [0.15, 0.2]
+    g_num = 10 * 6
+    max_weight = 20
+
+newpath = os.path.join('./NLGraph/shortest_path/graph', args.mode)
 if not os.path.exists(newpath):
     os.makedirs(newpath)
-    os.makedirs(newpath + '\\' + "full")
-    os.makedirs(newpath + '\\' + "standard") 
+    os.makedirs(os.path.join(newpath, "full"))
+    os.makedirs(os.path.join(newpath, "standard")) 
 graph_index, standard_index = 0, 0
 for num in tqdm(range(n_min, n_max+1)):
     for edge_probability in p_list:
@@ -68,7 +82,8 @@ for num in tqdm(range(n_min, n_max+1)):
             generator = Generator(num_of_nodes=num,edge_probability=edge_probability, max_weight=max_weight)
             Graph, q = generator.generate()
             edge = list(Graph.edges())
-            with open("./graph/"+args.mode+"/full/graph"+str(graph_index)+".txt","w") as f:
+            full_path = os.path.join("./NLGraph/shortest_path/graph", args.mode, "full", f"graph{graph_index}.txt")
+            with open(full_path, "w") as f:
                 f.write(str(Graph.number_of_nodes())+' '+str(Graph.number_of_edges())+'\n')
                 for i in range(len(Graph.edges())):
                     if random() < 0.5:
@@ -77,7 +92,8 @@ for num in tqdm(range(n_min, n_max+1)):
                         f.write(str(edge[i][1])+' '+str(edge[i][0])+' '+str(Graph[edge[i][0]][edge[i][1]]["weight"])+'\n')
                 f.write(str(q[0])+' '+str(q[1])+'\n')
             if generate_num < standard_num:
-                with open("./graph/"+args.mode+"/standard/graph"+str(standard_index)+".txt","w") as f:
+                standard_path = os.path.join("./NLGraph/shortest_path/graph", args.mode, "standard", f"graph{standard_index}.txt")
+                with open(standard_path, "w") as f:
                     f.write(str(Graph.number_of_nodes())+' '+str(Graph.number_of_edges())+'\n')
                     for i in range(len(Graph.edges())):
                         if random() < 0.5:

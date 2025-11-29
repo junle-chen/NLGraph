@@ -1,0 +1,6 @@
+usage: shortest_path.py [-h] [--model MODEL] [--mode MODE] [--prompt PROMPT]
+                        [--T T] [--token TOKEN] [--SC SC] [--city CITY]
+                        [--SC_num SC_NUM]
+shortest_path.py: error: unrecognized arguments: --prompt_mode CoT --api_key sk-J8Qx0Rc0f8FKSgQfcotx3GKdVAcj5wCM2xXBSdY9DzBY8ERF
+
+ERROR conda.cli.main_run:execute(125): `conda run python evaluation/shortest_path.py --model gpt-3.5-turbo --mode easy --prompt_mode CoT --token 1000 --SC_num 1 --api_key sk-J8Qx0Rc0f8FKSgQfcotx3GKdVAcj5wCM2xXBSdY9DzBY8ERF` failed. (See above for error)
